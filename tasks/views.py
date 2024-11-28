@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 from .models import Task
 from .forms import TaskCreationForm
 
-
 def index(request):
     tasks = Task.objects.all()
     params = {

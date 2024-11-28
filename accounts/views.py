@@ -23,6 +23,7 @@ class UserCreateAndLoginView(CreateView):
     success_url = reverse_lazy("tasks:index")
 
     def dispatch(self, request, *args, **kwargs):
+        print(f"User authenticated: {request.user.is_authenticated}") 
         if request.user.is_authenticated:
             return redirect('tasks:index')
         return super().dispatch(request, *args, **kwargs)
@@ -40,6 +41,7 @@ class UserCreateAndLoginView(CreateView):
 class UserDetail(DetailView, OnlyYouMixin):
     model = User
     template_name = 'accounts/user_detail.html'
+# Aquí termina
 
 class UserUpdate(UpdateView, OnlyYouMixin):
     model = User
@@ -49,16 +51,14 @@ class UserUpdate(UpdateView, OnlyYouMixin):
     def get_success_url(self):
         return reverse('user_detail', kwargs={'pk': self.kwargs['pk']})
 
+class UserDelete(DeleteView, OnlyYouMixin):
+    model = User
+    template_name = 'accounts/user_delete.html'
+    success_url = reverse_lazy('login')
 
-# Omitido
 class PasswordChange(PasswordChangeView):
     template_name = 'accounts/password_change.html'
 
 class PasswordChangeDone(PasswordChangeDoneView):
     template_name = 'accounts/user_detail.html'
-
-class UserDelete(DeleteView, OnlyYouMixin):
-    model = User
-    template_name = 'accounts/user_delete.html'
-    success_url = reverse_lazy('login')         
-# Aquí termina
+    
